@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <style>
+        #map {
+            width: 1500px;
+            height: 1000px;
+        }
+        </style>
+        <title>World Vaccination Data (April 10, 2021)</title>
+<h2 style="font-family:cambria"> World Covid-19 Vaccination Data (April 10, 2021) </h2>
+<p style="font-family:cambria"> The following map is a visual representaion of the most recent Covid-19 data throughout the world. This map contains three distinct datasets: <p style="font-family:cambria">
+1. Total Vaccinations (Number of people per hundred that have received at least one shot of the vaccine.)<p style="font-family:cambria">
+2. New Vaccinations (Number of new people per million vaccinated in the past seven days.)<p style="font-family:cambria">
+3. People Fully Vaccinated (Number of people per hundred that have been fully vaccinated.)<p style="font-family:cambria"> 
+</p> 
+    </head>
+    <body>
+        <div id="map">
+        </div>
+<p> Author: Alexander Ivanov | Data Sources: Natural Earth, Our World in Data <p>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="data/PeopleFullyVaccinated_0.js"></script>
+        <script src="data/NewVaccinations_1.js"></script>
+        <script src="data/TotalVaccintations_2.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+            highlightLayer.openPopup();
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        })
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
+        }
+        function pop_PeopleFullyVaccinated_0(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Country Name</th>\
+                        <td>' + (feature.properties['NAME_LONG'] !== null ? autolinker.link(feature.properties['NAME_LONG'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row"># of Fully Vaccinated People Per 100</th>\
+                        <td>' + (feature.properties['people_f_1'] !== null ? autolinker.link(feature.properties['people_f_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_PeopleFullyVaccinated_0_0(feature) {
+            if (feature.properties['people_f_1'] >= 0.000000 && feature.properties['people_f_1'] <= 0.000000 ) {
+                return {
+                pane: 'pane_PeopleFullyVaccinated_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,251,255,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['people_f_1'] >= 0.000000 && feature.properties['people_f_1'] <= 0.322000 ) {
+                return {
+                pane: 'pane_PeopleFullyVaccinated_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(200,221,240,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['people_f_1'] >= 0.322000 && feature.properties['people_f_1'] <= 3.030000 ) {
+                return {
+                pane: 'pane_PeopleFullyVaccinated_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(115,179,216,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['people_f_1'] >= 3.030000 && feature.properties['people_f_1'] <= 19.268000 ) {
+                return {
+                pane: 'pane_PeopleFullyVaccinated_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(40,121,185,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['people_f_1'] >= 19.268000 && feature.properties['people_f_1'] <= 124.090000 ) {
+                return {
+                pane: 'pane_PeopleFullyVaccinated_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(8,48,107,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_PeopleFullyVaccinated_0');
+        map.getPane('pane_PeopleFullyVaccinated_0').style.zIndex = 400;
+        map.getPane('pane_PeopleFullyVaccinated_0').style['mix-blend-mode'] = 'normal';
+        var layer_PeopleFullyVaccinated_0 = new L.geoJson(json_PeopleFullyVaccinated_0, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_PeopleFullyVaccinated_0',
+            layerName: 'layer_PeopleFullyVaccinated_0',
+            pane: 'pane_PeopleFullyVaccinated_0',
+            onEachFeature: pop_PeopleFullyVaccinated_0,
+            style: style_PeopleFullyVaccinated_0_0,
+        });
+        bounds_group.addLayer(layer_PeopleFullyVaccinated_0);
+        function pop_NewVaccinations_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Country Name</th>\
+                        <td>' + (feature.properties['NAME_LONG'] !== null ? autolinker.link(feature.properties['NAME_LONG'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row"># of New Vaccines Administered Per million</th>\
+                        <td>' + (feature.properties['new_vacc_1'] !== null ? autolinker.link(feature.properties['new_vacc_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                   </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_NewVaccinations_1_0(feature) {
+            if (feature.properties['new_vacc_1'] >= 0.000000 && feature.properties['new_vacc_1'] <= 0.000000 ) {
+                return {
+                pane: 'pane_NewVaccinations_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(237,248,251,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['new_vacc_1'] >= 0.000000 && feature.properties['new_vacc_1'] <= 773.200000 ) {
+                return {
+                pane: 'pane_NewVaccinations_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(179,205,227,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['new_vacc_1'] >= 773.200000 && feature.properties['new_vacc_1'] <= 7923.800000 ) {
+                return {
+                pane: 'pane_NewVaccinations_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(140,150,198,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['new_vacc_1'] >= 7923.800000 && feature.properties['new_vacc_1'] <= 39189.200000 ) {
+                return {
+                pane: 'pane_NewVaccinations_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(136,86,167,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['new_vacc_1'] >= 39189.200000 && feature.properties['new_vacc_1'] <= 3970571.000000 ) {
+                return {
+                pane: 'pane_NewVaccinations_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(129,15,124,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_NewVaccinations_1');
+        map.getPane('pane_NewVaccinations_1').style.zIndex = 401;
+        map.getPane('pane_NewVaccinations_1').style['mix-blend-mode'] = 'normal';
+        var layer_NewVaccinations_1 = new L.geoJson(json_NewVaccinations_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_NewVaccinations_1',
+            layerName: 'layer_NewVaccinations_1',
+            pane: 'pane_NewVaccinations_1',
+            onEachFeature: pop_NewVaccinations_1,
+            style: style_NewVaccinations_1_0,
+        });
+        bounds_group.addLayer(layer_NewVaccinations_1);
+        function pop_TotalVaccintations_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Counrty Name</th>\
+                        <td>' + (feature.properties['NAME_LONG'] !== null ? autolinker.link(feature.properties['NAME_LONG'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Total People Vaccinated Per 100</th>\
+                        <td>' + (feature.properties['total_va_1'] !== null ? autolinker.link(feature.properties['total_va_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                   </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_TotalVaccintations_2_0(feature) {
+            if (feature.properties['total_va_1'] >= 0.000000 && feature.properties['total_va_1'] <= 0.000000 ) {
+                return {
+                pane: 'pane_TotalVaccintations_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,252,245,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['total_va_1'] >= 0.000000 && feature.properties['total_va_1'] <= 0.322000 ) {
+                return {
+                pane: 'pane_TotalVaccintations_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(202,234,195,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['total_va_1'] >= 0.322000 && feature.properties['total_va_1'] <= 3.030000 ) {
+                return {
+                pane: 'pane_TotalVaccintations_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(123,200,124,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['total_va_1'] >= 3.030000 && feature.properties['total_va_1'] <= 19.268000 ) {
+                return {
+                pane: 'pane_TotalVaccintations_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(42,146,74,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['total_va_1'] >= 19.268000 && feature.properties['total_va_1'] <= 124.090000 ) {
+                return {
+                pane: 'pane_TotalVaccintations_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,68,27,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_TotalVaccintations_2');
+        map.getPane('pane_TotalVaccintations_2').style.zIndex = 402;
+        map.getPane('pane_TotalVaccintations_2').style['mix-blend-mode'] = 'normal';
+        var layer_TotalVaccintations_2 = new L.geoJson(json_TotalVaccintations_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_TotalVaccintations_2',
+            layerName: 'layer_TotalVaccintations_2',
+            pane: 'pane_TotalVaccintations_2',
+            onEachFeature: pop_TotalVaccintations_2,
+            style: style_TotalVaccintations_2_0,
+        });
+        bounds_group.addLayer(layer_TotalVaccintations_2);
+        map.addLayer(layer_TotalVaccintations_2);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'Total Vaccintations<br /><table><tr><td style="text-align: center;"><img src="legend/TotalVaccintations_2_000.png" /></td><td>0 - 0 </td></tr><tr><td style="text-align: center;"><img src="legend/TotalVaccintations_2_00321.png" /></td><td>0 - 0.32 </td></tr><tr><td style="text-align: center;"><img src="legend/TotalVaccintations_2_0323032.png" /></td><td>0.32 - 3.03 </td></tr><tr><td style="text-align: center;"><img src="legend/TotalVaccintations_2_30319273.png" /></td><td>3.03 - 19.27 </td></tr><tr><td style="text-align: center;"><img src="legend/TotalVaccintations_2_1927124094.png" /></td><td>19.27 - 124.09 </td></tr></table>': layer_TotalVaccintations_2,'New Vaccinations<br /><table><tr><td style="text-align: center;"><img src="legend/NewVaccinations_1_000.png" /></td><td>0 - 0 </td></tr><tr><td style="text-align: center;"><img src="legend/NewVaccinations_1_07731.png" /></td><td>0 - 773 </td></tr><tr><td style="text-align: center;"><img src="legend/NewVaccinations_1_77379242.png" /></td><td>773 - 7924 </td></tr><tr><td style="text-align: center;"><img src="legend/NewVaccinations_1_7924391893.png" /></td><td>7924 - 39189 </td></tr><tr><td style="text-align: center;"><img src="legend/NewVaccinations_1_3918939705714.png" /></td><td>39189 - 3970571 </td></tr></table>': layer_NewVaccinations_1,'People Fully Vaccinated<br /><table><tr><td style="text-align: center;"><img src="legend/PeopleFullyVaccinated_0_000.png" /></td><td>0 - 0 </td></tr><tr><td style="text-align: center;"><img src="legend/PeopleFullyVaccinated_0_00321.png" /></td><td>0 - 0.32 </td></tr><tr><td style="text-align: center;"><img src="legend/PeopleFullyVaccinated_0_0323032.png" /></td><td>0.32 - 3.03 </td></tr><tr><td style="text-align: center;"><img src="legend/PeopleFullyVaccinated_0_30319273.png" /></td><td>3.03 - 19.27 </td></tr><tr><td style="text-align: center;"><img src="legend/PeopleFullyVaccinated_0_1927124094.png" /></td><td>19.27 - 124.09 </td></tr></table>': layer_PeopleFullyVaccinated_0,},{collapsed:false}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
